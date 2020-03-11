@@ -17,7 +17,7 @@ namespace Feebl.Library.IO
 			return null;
 		}
 
-		public override string ToString() => "<native fn>";
+		public override string ToString() => "<native fn print(args...)>";
 	}
 
 	class Println : FeeblCallable
@@ -35,7 +35,7 @@ namespace Feebl.Library.IO
 			return null;
 		}
 
-		public override string ToString() => "<native fn>";
+		public override string ToString() => "<native fn println(args...)>";
 	}
 
 	class Read : FeeblCallable
@@ -56,6 +56,6 @@ namespace Feebl.Library.IO
 			}
 		}
 
-		public override string ToString() => "<native fn>";
+		public override string ToString() => "<native fn read()>";
 	}
 }

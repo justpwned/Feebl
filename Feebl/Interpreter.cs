@@ -50,11 +50,6 @@ namespace Feebl
 			}
 		}
 
-		//public void Resolve(Expr expr, int depth)
-		//{
-		//	locals[expr] = depth;
-		//}
-
 		private void Execute(Stmt stmt)
 		{
 			stmt.Accept(this);
@@ -227,25 +222,11 @@ namespace Feebl
 		private object LookUpVariable(Token name, Variable expr)
 		{
 			return environment.Get(name);
-			//if (locals.ContainsKey(expr))
-			//{
-			//	return environment.GetAt(locals[expr], name.Lexeme);
-			//}
-			//else
-			//{
-			//	return Globals.Get(name);
-			//}
 		}
 
 		public object VisitVariableExpr(Variable expr)
 		{
 			return LookUpVariable(expr.Name, expr);
-			// object value = environment.Get(expr.Name);
-			// if (value == uninitialized)
-			// {
-			// 	throw new RuntimeException(expr.Name, "Variable must be initialized before use.");
-			// }
-			// return value;
 		}
 
 		public void VisitVarStmt(Var stmt)

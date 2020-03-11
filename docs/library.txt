@@ -1,12 +1,11 @@
-Native functions:
+Standard library functions:
 
 clock()              Returns the number of milliseconds elapsed since the system started
 
-print(args...)       Prints variable argument list separated by single space excluding 							 trailing newline character
+print(args...)       Prints variable argument list separated by single space excluding trailing newline character
 
-println(args...)     Prints variable argument list separated by single space including
-					 trailing newline character
+println(args...)     Prints variable argument list separated by single space including trailing newline character
 
-read()               Reads line from console buffer and returns it (converting to number if 					 possible)
+read()               Reads line from console buffer and returns it (converting to number if possible)
 
 exit()               Immediately terminates program

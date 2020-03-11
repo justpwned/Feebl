@@ -11,7 +11,7 @@ namespace Feebl.Library
 			return (double)System.Environment.TickCount;
 		}
 
-		public override string ToString() => "<native fn>";
+		public override string ToString() => "<native function clock()>";
 	}
 
 	class Exit : FeeblCallable
@@ -23,5 +23,7 @@ namespace Feebl.Library
 			System.Environment.Exit(0);
 			return null;
 		}
+
+		public override string ToString() => "<native function exit()>";
 	}
 }
