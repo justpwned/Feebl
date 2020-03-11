@@ -1,7 +1,7 @@
  program        → declaration* EOF;
  declaration    → varDecl | statement ;
  statement      → exprStmt | printStmt | block | ifstmt | whileStmt | for Stmt;
- varDecl        → "var" IDENTIFIER( "=" expression )? ";" ;
+ varDecl        → "let" IDENTIFIER( "=" expression )? ";" ;
  exprStmt       → expression ";" ;
  printStmt      → "print" expression ";" ;
  block          → "{" declaration* "}" ;
@@ -24,9 +24,6 @@
  multiplication → unary(( "/" | "*" ) unary )* ;
  unary          → ( "!" | "-" ) unary | primary ;
 
- primary        → "true" | "false" | "nil"
-                | NUMBER | STRING
-                | "(" expression ")"
-                | IDENTIFIER ;
+ primary        → "true" | "false" | "nil" | NUMBER | STRING | "(" expression ")" | IDENTIFIER ;
 
  

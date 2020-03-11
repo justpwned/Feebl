@@ -62,6 +62,7 @@ namespace Feebl
 
 		private static void RunPrompt()
 		{
+			Console.WriteLine("Feebl v.0.1.");
 			while (true)
 			{
 				hadError = false;
