@@ -17,21 +17,51 @@ namespace Feebl
 
 		private static bool hadError = false;
 		private static bool hadRuntimeError = false;
+		private static bool debugMode = false;
 
         static int Main(string[] args)
         {
-			if (args.Length > 1)
+			if (args.Length == 0)
 			{
-				Console.WriteLine("Usage: Feebl.exe [script]");
-				return 1;
+				RunPrompt();
 			}
 			else if (args.Length == 1)
 			{
+				if (args[0][0] == '-')
+				{
+					if (args[0] == "-d")
+					{
+						debugMode = true;
+					}
+					else
+					{
+						Console.WriteLine("Unknown interpreter switch: {0}", args[0]);
+						return 1;
+					}
+					RunPrompt();
+				}
+				else
+				{
+					RunFile(args[0]);
+				}
+			}
+			else if (args.Length == 2)
+			{
+				if (args[1] == "-d")
+				{
+					debugMode = true;
+				}
+				else
+				{
+					Console.WriteLine("Unknown interpreter switch: {0}", args[1]);
+				}
+
 				RunFile(args[0]);
 			}
 			else
 			{
-				RunPrompt();
+				Console.WriteLine("Usage: Feebl.exe [script] [-d]");
+				return 1;
 			}
 
 			return 0;
@@ -48,6 +78,16 @@ namespace Feebl
 				Parser parser = new Parser(tokens);
 				List<Stmt> ast = parser.ParseFile();
 
+				if (debugMode)
+				{
+					AstPrinter astp = new AstPrinter();
+					foreach (var stmt in ast)
+					{
+						Console.WriteLine(astp.Print(stmt));
+					}
+					Console.WriteLine();
+				}
+
 				if (hadError) System.Environment.Exit(1);
 
 				interpreter.Interpret(ast);
@@ -62,7 +102,16 @@ namespace Feebl
 
 		private static void RunPrompt()
 		{
-			Console.WriteLine("Feebl v.0.1.");
+			if (!debugMode)
+			{
+				Console.WriteLine("Feebl v.0.1.");
+			}
+			else
+			{
+				Console.WriteLine("Feebl v.0.1. AST print mode on.");
+			}
+
+
 			while (true)
 			{
 				hadError = false;
@@ -73,21 +122,36 @@ namespace Feebl
 				List<Token> tokens = scanner.ScanTokens();
 				Parser parser = new Parser(tokens);	
 				object ast = parser.ParseRepl();
-				
+
 				if (hadError) continue;
 
 				if (ast is List<Stmt>)
 				{
 					if (hadError) continue;
 
+					if (debugMode)
+					{
+						AstPrinter astp = new AstPrinter();
+						foreach (var stmt in (ast as List<Stmt>))
+						{
+							Console.WriteLine(astp.Print(stmt));
+						}
+					}
+
 					interpreter.Interpret((List<Stmt>)ast);
 				}
 				else if (ast is Expr)
 				{
+					if (debugMode)
+					{
+						AstPrinter astp = new AstPrinter();
+						Console.WriteLine(astp.Print(ast as Expr));
+					}
+
 					string result = interpreter.Interpret((Expr)ast);
 					if (result != null)
 					{
-						Console.WriteLine(result);
+						Console.WriteLine("-> {0}", result);
 					}
 				}
 			}

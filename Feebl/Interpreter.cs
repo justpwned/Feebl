@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Feebl
 {
-	class Interpreter : Expr.Visitor<object>, Stmt.Visitor
+	class Interpreter : Expr.Visitor<object>, Stmt.Visitor<object>
 	{
 		public Environment Globals { get; } = new Environment();
 
@@ -214,9 +214,10 @@ namespace Feebl
 			return expr.Accept(this);
 		}
 
-		public void VisitExpressionStmt(Expression stmt)
+		public object VisitExpressionStmt(Expression stmt)
 		{
 			Evaluate(stmt.Expr);
+			return null;
 		}
 
 		private object LookUpVariable(Token name, Variable expr)
@@ -229,7 +230,7 @@ namespace Feebl
 			return LookUpVariable(expr.Name, expr);
 		}
 
-		public void VisitVarStmt(Var stmt)
+		public object VisitVarStmt(Var stmt)
 		{
 			object value = uninitialized;
 			if (stmt.Initializer != null)
@@ -238,11 +239,14 @@ namespace Feebl
 			}
 
 			environment.Define(stmt.Name.Lexeme, value);
+
+			return null;
 		}
 
-		public void VisitBlockStmt(Block stmt)
+		public object VisitBlockStmt(Block stmt)
 		{
 			ExecuteBlock(stmt.Statements, new Environment(environment));
+			return null;
 		}
 
 		public void ExecuteBlock(List<Stmt> statements, Environment environment)
@@ -263,7 +267,7 @@ namespace Feebl
 			}
 		}
 
-		public void VisitIfStmt(If stmt)
+		public object VisitIfStmt(If stmt)
 		{
 			if (IsTruthy(Evaluate(stmt.Condition)))
 			{
@@ -273,6 +277,7 @@ namespace Feebl
 			{
 				Execute(stmt.ElseBranch);
 			}
+			return null;
 		}
 
 		public object VisitLogicalExpr(Logical expr)
@@ -290,7 +295,7 @@ namespace Feebl
 			return Evaluate(expr.Right);
 		}
 
-		public void VisitWhileStmt(While stmt)
+		public object VisitWhileStmt(While stmt)
 		{
 			try
 			{
@@ -304,9 +309,10 @@ namespace Feebl
 				}
 			}
 			catch (BreakException e) { }
+			return null;
 		}
 
-		public void VisitForStmt(For stmt)
+		public object VisitForStmt(For stmt)
 		{
 			try
 			{
@@ -327,14 +333,15 @@ namespace Feebl
 				}
 			}
 			catch (BreakException e) { }
+			return null;
 		}
 
-		public void VisitBreakStmt(Break stmt)
+		public object VisitBreakStmt(Break stmt)
 		{
 			throw new BreakException();
 		}
 
-		public void VisitContinueStmt(Continue stmt)
+		public object VisitContinueStmt(Continue stmt)
 		{
 			throw new ContinueException();
 		}
@@ -374,13 +381,14 @@ namespace Feebl
 			return function.Call(this, args);
 		}
 
-		public void VisitFunctionStmt(Function stmt)
+		public object VisitFunctionStmt(Function stmt)
 		{
 			FeeblFunction function = new FeeblFunction(stmt, environment);
 			environment.Define(stmt.Name.Lexeme, function);
+			return null;
 		}
 
-		public void VisitReturnStmt(Return stmt)
+		public object VisitReturnStmt(Return stmt)
 		{
 			object value = null;
 			if (stmt.Value != null) value = Evaluate(stmt.Value);
