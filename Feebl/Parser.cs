@@ -18,8 +18,6 @@ namespace Feebl
 			this.tokens = tokens;
 		}
 
-		// Helper methods
-
 		private bool Match(params TokenType[] types)
 		{
 			foreach (var type in types)
@@ -38,8 +36,6 @@ namespace Feebl
 		private Token Peek() => tokens[current];
 		private Token Previous() => tokens[current - 1];
 		private Token Advance() => IsAtEnd() ? tokens[current - 1] : tokens[current++];
-		
-		// Parsing methods
 
 		public List<Stmt> ParseFile()
 		{
@@ -104,7 +100,7 @@ namespace Feebl
 			Consume(TokenType.RIGHT_PAREN, "Expected ')' after parameters.");
 
 			Consume(TokenType.LEFT_BRACE, $"Expected '{{' before {kind} body.");
-			Stmt body = ParseBlock();
+			Block body= ParseBlock() as Block;
 
 			return new Function(name, parameters, body);
 		}

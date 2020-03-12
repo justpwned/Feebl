@@ -36,6 +36,6 @@
 			Line = line;
 		}
 
-		public override string ToString() => $"{Type} {Lexeme} {Literal}";
+		public override string ToString() => $"{Type} {Lexeme}{Literal}";
 	}
 }
