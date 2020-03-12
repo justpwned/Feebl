@@ -5,21 +5,21 @@ namespace Feebl
 	// 10 concrete
 	abstract class Stmt
 	{
-		public interface Visitor
+		public interface Visitor<T>
 		{
-			void VisitBlockStmt(Block stmt);
-			void VisitExpressionStmt(Expression stmt);
-			void VisitVarStmt(Var stmt);
-			void VisitIfStmt(If stmt);
-			void VisitWhileStmt(While stmt);
-			void VisitForStmt(For stmt);
-			void VisitBreakStmt(Break stmt);
-			void VisitContinueStmt(Continue stmt);
-			void VisitFunctionStmt(Function stmt);
-			void VisitReturnStmt(Return stmt);
+			T VisitBlockStmt(Block stmt);
+			T VisitExpressionStmt(Expression stmt);
+			T VisitVarStmt(Var stmt);
+			T VisitIfStmt(If stmt);
+			T VisitWhileStmt(While stmt);
+			T VisitForStmt(For stmt);
+			T VisitBreakStmt(Break stmt);
+			T VisitContinueStmt(Continue stmt);
+			T VisitFunctionStmt(Function stmt);
+			T VisitReturnStmt(Return stmt);
 		}
 
-		public abstract void Accept(Visitor visitor);
+		public abstract T Accept<T>(Visitor<T> visitor);
 	}
 
 	class Return : Stmt
@@ -33,33 +33,33 @@ namespace Feebl
 			Value = value;
 		}
 
-		public override void Accept(Visitor visitor) => visitor.VisitReturnStmt(this);
+		public override T Accept<T>(Visitor<T> visitor) => visitor.VisitReturnStmt(this);
 	}
 
 	class Function : Stmt
 	{
 		public Token Name { get; }
 		public List<Token> Params { get; }
-		public Stmt Body { get; }
+		public Block Body { get; }
 
-		public Function(Token name, List<Token> parameters, Stmt body)
+		public Function(Token name, List<Token> parameters, Block body)
 		{
 			Name = name;
 			Params = parameters;
 			Body = body;
 		}
 
-		public override void Accept(Visitor visitor) => visitor.VisitFunctionStmt(this);
+		public override T Accept<T>(Visitor<T> visitor) => visitor.VisitFunctionStmt(this);
 	}
 
 	class Break : Stmt
 	{
-		public override void Accept(Visitor visitor) => visitor.VisitBreakStmt(this);
+		public override T Accept<T>(Visitor<T> visitor) => visitor.VisitBreakStmt(this);
 	}
 
 	class Continue : Stmt
 	{
-		public override void Accept(Visitor visitor) => visitor.VisitContinueStmt(this);
+		public override T Accept<T>(Visitor<T> visitor) => visitor.VisitContinueStmt(this);
 	}
 
 	class For : Stmt
@@ -75,7 +75,7 @@ namespace Feebl
 			Body = body;
 		}
 
-		public override void Accept(Visitor visitor) => visitor.VisitForStmt(this);
+		public override T Accept<T>(Visitor<T> visitor) => visitor.VisitForStmt(this);
 	}
 
 	class While : Stmt
@@ -89,7 +89,7 @@ namespace Feebl
 			Body = body;
 		}
 
-		public override void Accept(Visitor visitor) => visitor.VisitWhileStmt(this);
+		public override T Accept<T>(Visitor<T> visitor) => visitor.VisitWhileStmt(this);
 	}
 
 	class If : Stmt
@@ -105,7 +105,7 @@ namespace Feebl
 			ElseBranch = elseBranch;
 		}
 
-		public override void Accept(Visitor visitor) => visitor.VisitIfStmt(this);
+		public override T Accept<T>(Visitor<T> visitor) => visitor.VisitIfStmt(this);
 	}
 
 	class Block : Stmt
@@ -117,7 +117,7 @@ namespace Feebl
 			Statements = statements;
 		}
 
-		public override void Accept(Visitor visitor) => visitor.VisitBlockStmt(this);
+		public override T Accept<T>(Visitor<T> visitor) => visitor.VisitBlockStmt(this);
 	}
 
 	class Expression : Stmt
@@ -129,7 +129,7 @@ namespace Feebl
 			Expr = expression;
 		}
 
-		public override void Accept(Visitor visitor) => visitor.VisitExpressionStmt(this);
+		public override T Accept<T>(Visitor<T> visitor) => visitor.VisitExpressionStmt(this);
 	}
 
 	class Var : Stmt
@@ -143,6 +143,6 @@ namespace Feebl
 			Initializer = initializer;
 		}
 
-		public override void Accept(Visitor visitor) => visitor.VisitVarStmt(this);
+		public override T Accept<T>(Visitor<T> visitor) => visitor.VisitVarStmt(this);
 	}
 }

@@ -50,10 +50,7 @@ namespace Feebl
 			Right = right;
 		}
 
-		public override T Accept<T>(Visitor<T> visitor)
-		{
-			return visitor.VisitLogicalExpr(this);
-		}
+		public override T Accept<T>(Visitor<T> visitor) => visitor.VisitLogicalExpr(this);
 	}
 
 	class Assign : Expr
