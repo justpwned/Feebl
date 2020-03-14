@@ -21,6 +21,9 @@ namespace Feebl
 
         static int Main(string[] args)
         {
+			Console.InputEncoding = System.Text.Encoding.Unicode;
+			Console.OutputEncoding = System.Text.Encoding.Unicode;
+
 			if (args.Length == 0)
 			{
 				RunPrompt();
